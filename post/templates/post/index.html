@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+
+	<form method="POST">
+		{% csrf_token %}
+		<div class="input-group">
+		    <input type="text" class="form-control" placeholder="Enter tweet content..." name="content">
+		    <div class="input-group-btn">
+		       	<button class="btn btn-primary">Post to Twitter</button>
+		    </div>
+	</form>
+
+	<div class="form-group m-3">
+		<label>Upload Images</label>
+		<input required name="image" type="file" class="form-control-file">
+	</div>
+
+{% endblock %}
