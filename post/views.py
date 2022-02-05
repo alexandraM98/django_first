@@ -15,8 +15,7 @@ def index(request):
 			auth.set_access_token(settings.ACCESS_TOKEN, settings.ACCESS_TOKEN_SECRET)
 
 			api = tweepy.API(auth)
-			media = api.chunked_upload("post/example.mp4")
-			tweet = "Trying to upload a photo through Django..."
+			media = api.media_upload("post/image.png")
 			api.update_status(status=content, media_ids=[media.media_id])
 
 			return redirect('index')
