@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 #to make the styling of forms easier, there is a third party tool called crispy forms which will help generate Bootstrap-like forms.
 #Creating forms from scratch would mean a lot of processing and validation.
@@ -24,10 +25,30 @@ def register(request):
 
 @login_required #this decorator adds functionality to an existing function. In this case, it adds functionality to my profile view where the user must be logged in to view this page.
 def profile(request):
-	return render(request, 'users/profile.html')
+
+	if (request.method == 'POST'):
+		u_form = UserUpdateForm(request.POST, instance=request.user)
+		p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile) #with this parameter passed in, we are now populating the form with the current user logged in
+	
+		if (u_form.is_valid() and p_form.is_valid()):
+			u_form.save() 
+			p_form.save()
+			messages.success(request, f'Your account has been updated successfully!')
+			return redirect('profile')
+
+	else:
+		u_form = UserUpdateForm(instance=request.user)
+		p_form = ProfileUpdateForm(instance=request.user.profile)
+
+	context = {
+		'u_form' : u_form,
+		'p_form' : p_form
+	}
+	return render(request, 'users/profile.html', context)
 
 #Types of messages:
 #messages.debug
 #messages.info
 #messages.success
 #messages.error
+

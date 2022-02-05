@@ -5,9 +5,10 @@ from django.shortcuts import render, redirect
 
 #This view will be used for posting tweets
 def index(request): 
-	if request.method == 'POST':
-		content = request.POST.get('content', '')
 
+	if request.method == 'POST':
+
+		content = request.POST.get('content', '')
 		if content:
 			print('Content: ', content)
 
@@ -15,9 +16,13 @@ def index(request):
 			auth.set_access_token(settings.ACCESS_TOKEN, settings.ACCESS_TOKEN_SECRET)
 
 			api = tweepy.API(auth)
-			media = api.media_upload("post/image.png")
+			media = api.media_upload('post/image.png')
 			api.update_status(status=content, media_ids=[media.media_id])
 
 			return redirect('index')
 
 	return render(request, 'post/index.html')
+
+
+	
+
